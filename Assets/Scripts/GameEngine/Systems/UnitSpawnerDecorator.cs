@@ -16,7 +16,7 @@ namespace GameEngine
         public void Spawn(string type, Vector3 position, Vector3 rotation, int hitPoints)
         {
             var unit = _unitManager.SpawnUnit(_unitsPrefabsCollection.GetPrefab(type), 
-                position, new Quaternion(rotation.x, rotation.y, rotation.z, 0));
+                position, Quaternion.Euler(rotation));
             unit.HitPoints = hitPoints;
         }
     }

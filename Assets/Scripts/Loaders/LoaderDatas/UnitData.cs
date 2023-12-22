@@ -1,14 +1,16 @@
-using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Homework5
 {
-    [Serializable]
     public struct UnitData
     {
-        public int HitPoints;
-        public SerializedVector3 Position;
-        public SerializedVector3 Rotation;
+        [JsonProperty]
+        public int HitPoints { get; private set; }
+        [JsonProperty]
+        public SerializedVector3 Position { get; private set; }
+        [JsonProperty]
+        public SerializedVector3 Rotation { get; private set; }
 
         public UnitData(int hitPoints, Vector3 position, Vector3 rotation)
         {

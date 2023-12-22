@@ -1,28 +1,28 @@
-using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Homework5
 {
-    [Serializable]
     public struct UnitsData
     {
-        public Dictionary<string, List<UnitData>> Units;
+        [JsonProperty]
+        private Dictionary<string, List<UnitData>> units;
 
         public UnitsData(Dictionary<string, List<UnitData>> units)
         {
-            Units = units;
+            this.units = units;
         }
         
         public void AddData(string type, UnitData unitData)
         {
-            if(!Units.ContainsKey(type))
-                Units.Add(type, new List<UnitData>());
+            if(!units.ContainsKey(type))
+                units.Add(type, new List<UnitData>());
         
-            Units[type].Add(unitData);
+            units[type].Add(unitData);
         }
         public IReadOnlyDictionary<string, List<UnitData>> GetData()
         {
-            return Units;
+            return units;
         }
     }
 }

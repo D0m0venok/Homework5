@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Homework5
 {
-    [Serializable]
     public struct ResourcesData
     {
-        public Dictionary<string, int> Resources;
+        [JsonProperty]
+        public readonly IReadOnlyDictionary<string, int> Resources;
 
         public ResourcesData(Dictionary<string, int> resources)
         {
