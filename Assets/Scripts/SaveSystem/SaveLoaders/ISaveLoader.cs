@@ -1,7 +1,10 @@
 ﻿using Zenject;
 
-public interface ISaveLoader
+namespace SaveSystem
 {
-    void SaveGame(IGameRepository gameRepository, DiContainer container);
-    void LoadGame(IGameRepository gameRepository, DiContainer container);
+    public interface ISaveLoader
+    {
+        void SaveGame(IGameRepository gameRepository, DiContainer container);
+        void LoadGame(IGameRepository gameRepository, DiContainer container);
+    }
 }

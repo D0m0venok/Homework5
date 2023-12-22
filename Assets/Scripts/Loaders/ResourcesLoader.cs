@@ -1,21 +1,22 @@
 using System.Linq;
 using GameEngine;
+using SaveSystem;
 
-public sealed class ResourcesLoader : SaveLoader<ResourcesData, ResourceService>
+namespace Homework5
 {
-    protected override ResourcesData ConvertToData(ResourceService service)
+    public sealed class ResourcesLoader : SaveLoader<ResourcesData, ResourceService>
     {
-        return new ResourcesData
+        protected override ResourcesData ConvertToData(ResourceService service)
         {
-            Resources = service.GetResources().ToDictionary(r => r.ID, r => r.Amount)
-        };
-    }
-    protected override void SetData(ResourcesData data, ResourceService service)
-    {
-        var resources = service.GetResources();
-        foreach (var resource in resources)
+            return new ResourcesData(service.GetResources().ToDictionary(r => r.ID, r => r.Amount));
+        }
+        protected override void SetData(ResourcesData data, ResourceService service)
         {
-            resource.Amount = data.Resources[resource.ID];
+            var resources = service.GetResources();
+            foreach (var resource in resources)
+            {
+                resource.Amount = data.Resources[resource.ID];
+            }
         }
     }
 }

@@ -1,8 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-[Serializable]
-public struct ResourcesData
+namespace Homework5
 {
-    public Dictionary<string, int> Resources;
+    [Serializable]
+    public struct ResourcesData
+    {
+        public Dictionary<string, int> Resources;
+
+        public ResourcesData(Dictionary<string, int> resources)
+        {
+            Resources = resources;
+        }
+    }
 }
