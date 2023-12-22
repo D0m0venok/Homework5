@@ -1,14 +1,17 @@
 using System;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Homework5
 {
-    [Serializable]
     public struct SerializedVector3
     {
-        public float X;
-        public float Y;
-        public float Z;
+        [JsonProperty]
+        public float X { get; private set; }
+        [JsonProperty]
+        public float Y { get; private set; }
+        [JsonProperty]
+        public float Z { get; private set; }
 
         public SerializedVector3(Vector3 vector3)
         {
