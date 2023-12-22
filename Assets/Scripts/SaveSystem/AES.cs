@@ -7,6 +7,9 @@ namespace SaveSystem
     public sealed class AES
     {
         private readonly AesCryptoServiceProvider _cryptoServiceProvider;
+        private readonly ICryptoTransform _encryptor;
+        private readonly ICryptoTransform _decryptor;
+
 
         public AES(string iv, string key)
         {
@@ -18,19 +21,20 @@ namespace SaveSystem
             _cryptoServiceProvider.Key = GetKey(key);
             _cryptoServiceProvider.Mode = CipherMode.CBC;
             _cryptoServiceProvider.Padding = PaddingMode.PKCS7;
+
+            _encryptor = _cryptoServiceProvider.CreateEncryptor();
+            _decryptor = _cryptoServiceProvider.CreateDecryptor();
         }
 
         public string Encrypt(string str)
         {
-            var transform = _cryptoServiceProvider.CreateEncryptor();
-            var encrypted = transform.TransformFinalBlock(Encoding.ASCII.GetBytes(str), 0, str.Length);
+            var encrypted = _encryptor.TransformFinalBlock(Encoding.ASCII.GetBytes(str), 0, str.Length);
             return Convert.ToBase64String(encrypted);
         }
         public string Decrypt(string str)
         {
-            var transform = _cryptoServiceProvider.CreateDecryptor();
             var encrypted = Convert.FromBase64String(str);
-            var decrypted = transform.TransformFinalBlock(encrypted, 0, encrypted.Length);
+            var decrypted = _decryptor.TransformFinalBlock(encrypted, 0, encrypted.Length);
 
             return Encoding.ASCII.GetString(decrypted);
         }

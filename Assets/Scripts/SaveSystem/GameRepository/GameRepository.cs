@@ -6,7 +6,7 @@ namespace SaveSystem
     public sealed class GameRepository : IGameRepository
     {
         private Dictionary<string, string> _gameState = new();
-        private readonly FileStorage _fileStorage = new(false);
+        private readonly FileStorage _fileStorage = new(true);
 
         public T GetData<T>()
         {
