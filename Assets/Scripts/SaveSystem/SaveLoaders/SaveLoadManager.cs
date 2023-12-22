@@ -19,9 +19,8 @@ public sealed class SaveLoadManager : MonoBehaviour
     public void LoadGame()
     {
         _gameRepository.LoadState();
-        var loaders = _diContainer.Resolve<ISaveLoader[]>();
-
-        foreach (var loader in loaders)
+        
+        foreach (var loader in _saveLoaders)
         {
             loader.LoadGame(_gameRepository, _diContainer);
         }

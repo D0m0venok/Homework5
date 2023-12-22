@@ -1,28 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public sealed class SaveDataSystem
+public sealed class FileStorage
 {
+    private const string SAVE_NAME = "SaveData";
+    
+    private const string IV = "testIv";
+    private const string KEY = "testKey";
+    
     private readonly AES _aes;
     private readonly bool _withEncryption;
 
-    public SaveDataSystem()
+    public FileStorage(bool withEncryption)
     {
-        _withEncryption = false;
-    }
-    public SaveDataSystem(string iv, string key)
-    {
-        _aes = new AES(iv, key);
-        _withEncryption = true;
+        _withEncryption = withEncryption;
+        
+        if(_withEncryption)
+            _aes = new AES(IV, KEY);
     }
     
-    public void SaveData<T>(T data, string filename)
+    public void SaveData(Dictionary<string, string> data)
     {
         try
         {
-            using var stream = new FileStream(GetSavePath(filename), FileMode.Create);
+            using var stream = new FileStream(GetSavePath(), FileMode.Create);
             using var writer = new StreamWriter(stream);
             var stringData = JsonConvert.SerializeObject(data);
             
@@ -37,21 +41,21 @@ public sealed class SaveDataSystem
             throw;
         }
     }
-    public T LoadData<T>(string filename) where T : class
+    public Dictionary<string, string> LoadData()
     {
-        if (!IsDataExists(filename))
+        if (!IsDataExists())
             return null;
 
         try
         {
-            using var stream = new FileStream(GetSavePath(filename), FileMode.Open);
+            using var stream = new FileStream(GetSavePath(), FileMode.Open);
             using var reader = new StreamReader(stream);
             var stringData = reader.ReadToEnd();
 
             if (_withEncryption)
                 stringData = _aes.Decrypt(stringData);
             
-            return JsonConvert.DeserializeObject<T>(stringData);
+            return JsonConvert.DeserializeObject<Dictionary<string, string>>(stringData);
         }
         catch (Exception e)
         {
@@ -59,14 +63,14 @@ public sealed class SaveDataSystem
             return null;
         }
     }
-    public bool DeleteData(string filename)
+    public bool DeleteData()
     {
-        if (!IsDataExists(filename))
+        if (!IsDataExists())
             return false;
 
         try
         {
-            File.Delete(GetSavePath(filename));
+            File.Delete(GetSavePath());
         }
         catch (Exception ex)
         {
@@ -76,13 +80,13 @@ public sealed class SaveDataSystem
 
         return true;
     }
-    public bool IsDataExists(string filename)
+    public bool IsDataExists()
     {
-        return File.Exists(GetSavePath(filename));
+        return File.Exists(GetSavePath());
     }
 
-    private string GetSavePath(string name)
+    private string GetSavePath()
     {
-        return Path.Combine(Application.persistentDataPath, name);
+        return Path.Combine(Application.persistentDataPath, SAVE_NAME);
     }
 }

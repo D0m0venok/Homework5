@@ -3,18 +3,9 @@ using Newtonsoft.Json;
 
 public class GameRepository : IGameRepository
 {
-    private const string SAVE_NAME = "SaveData";
-    private const string IV = "testIv";
-    private const string KEY = "testKey";
-        
     private Dictionary<string, string> _gameState = new();
-    private readonly SaveDataSystem _gameDataSystem;
+    private readonly FileStorage _fileStorage = new(false);
 
-    public GameRepository()
-    {
-        _gameDataSystem = new SaveDataSystem(IV, KEY);
-    }
-    
     public T GetData<T>()
     {
         return JsonConvert.DeserializeObject<T>(_gameState[typeof(T).Name]);
@@ -37,15 +28,15 @@ public class GameRepository : IGameRepository
 
     public void LoadState()
     {
-        if (_gameDataSystem.IsDataExists(SAVE_NAME))
-            _gameState = _gameDataSystem.LoadData<Dictionary<string, string>>(SAVE_NAME);
+        if (_fileStorage.IsDataExists())
+            _gameState = _fileStorage.LoadData();
     }
     public void SaveState()
     {
-        _gameDataSystem.SaveData(_gameState, SAVE_NAME);
+        _fileStorage.SaveData(_gameState);
     }
     public void DeleteState()
     {
-        _gameDataSystem.DeleteData(SAVE_NAME);
+        _fileStorage.DeleteData();
     }
 }

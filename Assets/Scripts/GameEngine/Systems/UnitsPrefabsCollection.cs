@@ -5,11 +5,11 @@ using GameEngine;
 using UnityEngine;
 
 [Serializable]
-public sealed class UnitsPrefabsManager
+public sealed class UnitsPrefabsCollection
 {
     private Dictionary<string, Unit> _prefabs;
 
-    public UnitsPrefabsManager(Unit[] unitPrefabs)
+    public UnitsPrefabsCollection(IEnumerable<Unit> unitPrefabs)
     {
         _prefabs = unitPrefabs.ToDictionary(u => u.Type);
     }

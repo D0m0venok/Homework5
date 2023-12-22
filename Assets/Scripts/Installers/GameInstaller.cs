@@ -16,9 +16,11 @@ public sealed class GameInstaller : MonoInstaller
         Container.Bind<UnitManager>().FromInstance(_unitManager).AsSingle().WithArguments(_unitsContainer);
         Container.Bind<ResourceService>().FromInstance(_resourceService).AsSingle();
         Container.Bind<SaveLoadManager>().FromInstance(_saveLoadManager).AsSingle();
-        Container.Bind<UnitsPrefabsManager>().AsSingle().WithArguments(_unitPrefabs);
-        Container.BindInterfacesTo<ResourcesLoader>().AsSingle();
-        Container.BindInterfacesTo<UnitsLoader>().AsSingle();
+        Container.Bind<UnitsPrefabsCollection>().AsSingle().WithArguments(_unitPrefabs);
+        Container.Bind<UnitSpawnerDecorator>().AsSingle();
+        
+        Container.BindInterfacesTo<ResourcesLoader>().AsCached();
+        Container.BindInterfacesTo<UnitsLoader>().AsCached();
         
         _unitManager.SetupUnits(FindObjectsOfType<Unit>());
         _resourceService.SetResources(FindObjectsOfType<Resource>());
